@@ -32,4 +32,17 @@ class UtilTest extends TestCase
         $this->assertTrue($util->isZeroPrefixed('0x1234'));
         $this->assertFalse($util->isZeroPrefixed('1234'));
     }
+
+    /**
+     * testStripZero
+     * 
+     * @return void
+     */
+    public function testStripZero()
+    {
+        $util = new Util;
+
+        $this->assertEquals('1234', $util->stripZero('0x1234'));
+        $this->assertEquals('1234', $util->stripZero('1234'));
+    }
 }

@@ -96,11 +96,26 @@ class Util
     /**
      * isZeroPrefixed
      * 
-     * @param string
+     * @param string $value
      * @return bool
      */
     public function isZeroPrefixed(string $value)
     {
         return (strpos($value, '0x') === 0);
+    }
+
+    /**
+     * stripZero
+     * 
+     * @param string $value
+     * @return string
+     */
+    public function stripZero(string $value)
+    {
+        if ($this->isZeroPrefixed($value)) {
+            $count = 1;
+            return str_replace('0x', '', $value, $count);
+        }
+        return $value;
     }
 }
