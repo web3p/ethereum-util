@@ -148,4 +148,26 @@ class Util
         }
         return '0x' . substr($this->sha3(substr(hex2bin($publicKey), 1)), 24);
     }
+
+    /**
+     * privateKeyToPublicKey
+     * 
+     * @param string $privateKey
+     * @return string
+     */
+    public function privateKeyToPublicKey(string $privateKey)
+    {
+        if ($this->isHex($privateKey) === false) {
+            throw new InvalidArgumentException('Invalid private key format.');
+        }
+        $privateKey = $this->stripZero($privateKey);
+
+        if (strlen($privateKey) !== 64) {
+            throw new InvalidArgumentException('Invalid public key length.');
+        }
+        $privateKey = $this->secp256k1->keyFromPrivate($privateKey, 'hex');
+        $publicKey = $privateKey->getPublic(false, 'hex');
+
+        return '0x' . $publicKey;
+    }
 }
