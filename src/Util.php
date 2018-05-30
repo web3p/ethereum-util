@@ -129,4 +129,23 @@ class Util
     {
         return (is_string($value) && preg_match('/^(0x)?[a-f0-9]+$/', $value) === 1);
     }
+
+    /**
+     * publicKeyToAddress
+     * 
+     * @param string $publicKey
+     * @return string
+     */
+    public function publicKeyToAddress(string $publicKey)
+    {
+        if ($this->isHex($publicKey) === false) {
+            throw new InvalidArgumentException('Invalid public key format.');
+        }
+        $publicKey = $this->stripZero($publicKey);
+
+        if (strlen($publicKey) !== 130) {
+            throw new InvalidArgumentException('Invalid public key length.');
+        }
+        return '0x' . substr($this->sha3(substr(hex2bin($publicKey), 1)), 24);
+    }
 }
