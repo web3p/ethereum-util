@@ -118,4 +118,15 @@ class Util
         }
         return $value;
     }
+
+    /**
+     * isHex
+     * 
+     * @param string $value
+     * @return bool
+     */
+    public function isHex(string $value)
+    {
+        return (is_string($value) && preg_match('/^(0x)?[a-f0-9]+$/', $value) === 1);
+    }
 }

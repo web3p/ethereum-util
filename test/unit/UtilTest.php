@@ -45,4 +45,18 @@ class UtilTest extends TestCase
         $this->assertEquals('1234', $util->stripZero('0x1234'));
         $this->assertEquals('1234', $util->stripZero('1234'));
     }
+
+    /**
+     * testIsHex
+     * 
+     * @return void
+     */
+    public function testIsHex()
+    {
+        $util = new Util;
+
+        $this->assertTrue($util->isHex('1234'));
+        $this->assertTrue($util->isHex('0x1234'));
+        $this->assertFalse($util->isHex('hello world'));
+    }
 }
