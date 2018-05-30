@@ -170,4 +170,38 @@ class Util
 
         return '0x' . $publicKey;
     }
+
+    /**
+     * recoverPublicKey
+     *
+     * @param string $hash
+     * @param string $r
+     * @param string $s
+     * @param int $v
+     * @return string
+     */
+    public function recoverPublicKey(string $hash, string $r, string $s, int $v)
+    {
+        if ($this->isHex($hash) === false) {
+            throw new InvalidArgumentException('Invalid hash format.');
+        }
+        $hash = $this->stripZero($hash);
+
+        if ($this->isHex($r) === false || $this->isHex($s) === false) {
+            throw new InvalidArgumentException('Invalid signature format.');
+        }
+        $r = $this->stripZero($r);
+        $s = $this->stripZero($s);
+
+        if (strlen($r) !== 64 || strlen($s) !== 64) {
+            throw new InvalidArgumentException('Invalid signature length.');
+        }
+        $publicKey = $this->secp256k1->recoverPubKey($hash, [
+            'r' => $r,
+            's' => $s
+        ], $v);
+        $publicKey = $publicKey->encode('hex');
+
+        return '0x' . $publicKey;
+    }
 }
