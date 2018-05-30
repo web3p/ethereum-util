@@ -92,4 +92,15 @@ class Util
         }
         return $hash;
     }
+
+    /**
+     * isZeroPrefixed
+     * 
+     * @param string
+     * @return bool
+     */
+    public function isZeroPrefixed(string $value)
+    {
+        return (strpos($value, '0x') === 0);
+    }
 }
