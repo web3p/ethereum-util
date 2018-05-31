@@ -163,7 +163,7 @@ class Util
         $privateKey = $this->stripZero($privateKey);
 
         if (strlen($privateKey) !== 64) {
-            throw new InvalidArgumentException('Invalid public key length.');
+            throw new InvalidArgumentException('Invalid private key length.');
         }
         $privateKey = $this->secp256k1->keyFromPrivate($privateKey, 'hex');
         $publicKey = $privateKey->getPublic(false, 'hex');
