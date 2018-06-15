@@ -127,7 +127,7 @@ class Util
      */
     public function isHex(string $value)
     {
-        return (is_string($value) && preg_match('/^(0x)?[a-f0-9]+$/', $value) === 1);
+        return (is_string($value) && preg_match('/^(0x)?[a-fA-F0-9]+$/', $value) === 1);
     }
 
     /**
