@@ -127,7 +127,7 @@ class Util
      */
     public function isHex(string $value)
     {
-        return (is_string($value) && preg_match('/^(0x)?[a-f0-9]+$/', $value) === 1);
+        return (is_string($value) && preg_match('/^(0x)?[a-fA-F0-9]+$/', $value) === 1);
     }
 
     /**
@@ -163,7 +163,7 @@ class Util
         $privateKey = $this->stripZero($privateKey);
 
         if (strlen($privateKey) !== 64) {
-            throw new InvalidArgumentException('Invalid public key length.');
+            throw new InvalidArgumentException('Invalid private key length.');
         }
         $privateKey = $this->secp256k1->keyFromPrivate($privateKey, 'hex');
         $publicKey = $privateKey->getPublic(false, 'hex');
