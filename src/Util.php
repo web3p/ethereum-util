@@ -16,6 +16,7 @@ use RuntimeException;
 use kornrunner\Keccak;
 use Elliptic\EC;
 use Elliptic\EC\KeyPair;
+use Elliptic\EC\Signature;
 
 class Util
 {
@@ -203,5 +204,46 @@ class Util
         $publicKey = $publicKey->encode('hex');
 
         return '0x' . $publicKey;
+    }
+
+    /**
+     * ecsign
+     * 
+     * @param string $privateKey
+     * @param string $message
+     * @return \Elliptic\EC\Signature
+     */
+    public function ecsign(string $privateKey, string $message)
+    {
+        if ($this->isHex($privateKey) === false) {
+            throw new InvalidArgumentException('Invalid private key format.');
+        }
+        $privateKeyLength = strlen($this->stripZero($privateKey));
+
+        if ($privateKeyLength % 2 !== 0 && $privateKeyLength !== 64) {
+            throw new InvalidArgumentException('Private key length was wrong.');
+        }
+        $secp256k1 = new EC('secp256k1');
+        $privateKey = $secp256k1->keyFromPrivate($privateKey, 'hex');
+        $signature = $privateKey->sign($message, [
+            'canonical' => true
+        ]);
+        // Ethereum v is recovery param + 35
+        // Or recovery param + 35 + (chain id * 2)
+        $signature->recoveryParam += 35;
+
+        return $signature;
+    }
+
+    /**
+     * hasPersonalMessage
+     * 
+     * @param string $message
+     * @return string
+     */
+    public function hashPersonalMessage(string $message)
+    {
+        $prefix = sprintf("\x19Ethereum Signed Message:\n%d", mb_strlen($message));
+        return $this->sha3($prefix . $message);
     }
 }
