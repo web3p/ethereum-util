@@ -234,4 +234,16 @@ class Util
 
         return $signature;
     }
+
+    /**
+     * hasPersonalMessage
+     * 
+     * @param string $message
+     * @return string
+     */
+    public function hashPersonalMessage(string $message)
+    {
+        $prefix = sprintf("\x19Ethereum Signed Message:\n%d", mb_strlen($message));
+        return $this->sha3($prefix . $message);
+    }
 }

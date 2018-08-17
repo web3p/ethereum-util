@@ -114,4 +114,17 @@ class UtilTest extends TestCase
         $this->assertEquals('67cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83', $signature->s->toString(16));
         $this->assertEquals(35, $signature->recoveryParam);
     }
+
+    /**
+     * testHashPersonalMessage
+     * 
+     * @return void
+     */
+    public function testHashPersonalMessage()
+    {
+        $util = new Util;
+        $hashedMessage = $util->hashPersonalMessage('Hello world');
+
+        $this->assertEquals('8144a6fa26be252b86456491fbcd43c1de7e022241845ffea1c3df066f7cfede', $hashedMessage);
+    }
 }
