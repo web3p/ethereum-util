@@ -58,6 +58,8 @@ class UtilTest extends TestCase
         $this->assertTrue($util->isHex('1234'));
         $this->assertTrue($util->isHex('0x1234'));
         $this->assertFalse($util->isHex('hello world'));
+        $this->assertTrue($util->isHex('0x3db20a82Cf2C02642A8c2E163063640F4Effe59F'));
+        $this->assertTrue($util->isHex('0X3db20a82Cf2C02642A8c2E163063640F4Effe59F'));
     }
 
     /**
