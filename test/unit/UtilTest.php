@@ -98,4 +98,20 @@ class UtilTest extends TestCase
         $this->assertEquals('0x044bc2a31265153f07e70e0bab08724e6b85e217f8cd628ceb62974247bb493382ce28cab79ad7119ee1ad3ebcdb98a16805211530ecc6cfefa1b88e6dff99232a', $util->recoverPublicKey('0xdaf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53', '0x28ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276', '0x67cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83', 0));
         $this->assertEquals('0x044bc2a31265153f07e70e0bab08724e6b85e217f8cd628ceb62974247bb493382ce28cab79ad7119ee1ad3ebcdb98a16805211530ecc6cfefa1b88e6dff99232a', $util->recoverPublicKey('daf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53', '28ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276', '67cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83', 0));
     }
+
+    /**
+     * testEcsign
+     * 
+     * @return void
+     */
+    public function testEcsign()
+    {
+        $util = new Util;
+        $signature = $util->ecsign('0x4646464646464646464646464646464646464646464646464646464646464646', 'daf5a779ae972f972197303d7b574746c7ef83eadac0f2791ad23db92e4c8e53');
+
+        // EIP155 test data
+        $this->assertEquals('28ef61340bd939bc2195fe537567866003e1a15d3c71ff63e1590620aa636276', $signature->r->toString(16));
+        $this->assertEquals('67cbe9d8997f761aecb703304b3800ccf555c9f3dc64214b297fb1966a3b6d83', $signature->s->toString(16));
+        $this->assertEquals(35, $signature->recoveryParam);
+    }
 }
