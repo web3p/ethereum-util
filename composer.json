@@ -25,6 +25,6 @@
     "require": {
         "PHP": "^7.1",
         "kornrunner/keccak": "~1",
-        "simplito/elliptic-php": "1.0.3"
+        "simplito/elliptic-php": "~1.0.6"
     }
 }
