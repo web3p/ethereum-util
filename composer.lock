@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2e710e778d321a6aa09571504dd699bb",
+    "content-hash": "3dbefdae6d5e4274736d4675eff3cc1d",
     "packages": [
         {
             "name": "kornrunner/keccak",
@@ -126,16 +126,16 @@
         },
         {
             "name": "simplito/elliptic-php",
-            "version": "1.0.3",
+            "version": "1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplito/elliptic-php.git",
-                "reference": "cab829d270dfd6acdff8383d862ed02a12d1f9dd"
+                "reference": "15652609aa55968d56685c2a9120535ccdc00fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplito/elliptic-php/zipball/cab829d270dfd6acdff8383d862ed02a12d1f9dd",
-                "reference": "cab829d270dfd6acdff8383d862ed02a12d1f9dd",
+                "url": "https://api.github.com/repos/simplito/elliptic-php/zipball/15652609aa55968d56685c2a9120535ccdc00fd9",
+                "reference": "15652609aa55968d56685c2a9120535ccdc00fd9",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
                 "nistp521",
                 "secp256k1"
             ],
-            "time": "2018-04-12T11:17:52+00:00"
+            "time": "2019-11-14T13:43:07+00:00"
         }
     ],
     "packages-dev": [
@@ -995,6 +995,7 @@
                 "mock",
                 "xunit"
             ],
+            "abandoned": true,
             "time": "2018-05-29T13:50:43+00:00"
         },
         {
