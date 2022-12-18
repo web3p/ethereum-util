@@ -51,7 +51,7 @@ class Util
      * @param string $name
      * @return mixed
      */
-    public function __get($name)
+    public function __get($name): mixed
     {
         $method = 'get' . ucfirst($name);
 
@@ -66,16 +66,15 @@ class Util
      * 
      * @param string $name
      * @param mixed $value
-     * @return mixed
+     * @return void
      */
-    public function __set($name, $value)
+    public function __set($name, $value): void
     {
         $method = 'set' . ucfirst($name);
 
         if (method_exists($this, $method)) {
-            return call_user_func_array([$this, $method], [$value]);
+            call_user_func_array([$this, $method], [$value]);
         }
-        return false;
     }
 
     /**
@@ -83,9 +82,9 @@ class Util
      * keccak256
      * 
      * @param string $value
-     * @return string
+     * @return null|string
      */
-    public function sha3(string $value)
+    public function sha3(string $value): mixed
     {
         $hash = Keccak::hash($value, 256);
 
@@ -101,7 +100,7 @@ class Util
      * @param string $value
      * @return bool
      */
-    public function isZeroPrefixed(string $value)
+    public function isZeroPrefixed(string $value): bool
     {
         return (strpos($value, '0x') === 0);
     }
@@ -112,7 +111,7 @@ class Util
      * @param string $value
      * @return string
      */
-    public function stripZero(string $value)
+    public function stripZero(string $value): string
     {
         if ($this->isZeroPrefixed($value)) {
             $count = 1;
@@ -127,7 +126,7 @@ class Util
      * @param string $value
      * @return bool
      */
-    public function isHex(string $value)
+    public function isHex(string $value): bool
     {
         return (is_string($value) && preg_match('/^(0x)?[a-fA-F0-9]+$/', $value) === 1);
     }
@@ -139,7 +138,7 @@ class Util
      * @throws InvalidArgumentException
      * @return string
      */
-    public function publicKeyToAddress(string $publicKey)
+    public function publicKeyToAddress(string $publicKey): string
     {
         if ($this->isHex($publicKey) === false) {
             throw new InvalidArgumentException('Invalid public key format.');
@@ -159,7 +158,7 @@ class Util
      * @throws InvalidArgumentException
      * @return string
      */
-    public function privateKeyToPublicKey(string $privateKey)
+    public function privateKeyToPublicKey(string $privateKey): string
     {
         if ($this->isHex($privateKey) === false) {
             throw new InvalidArgumentException('Invalid private key format.');
@@ -185,7 +184,7 @@ class Util
      * @throws InvalidArgumentException
      * @return string
      */
-    public function recoverPublicKey(string $hash, string $r, string $s, int $v)
+    public function recoverPublicKey(string $hash, string $r, string $s, int $v): string
     {
         if ($this->isHex($hash) === false) {
             throw new InvalidArgumentException('Invalid hash format.');
@@ -218,7 +217,7 @@ class Util
      * @throws InvalidArgumentException
      * @return \Elliptic\EC\Signature
      */
-    public function ecsign(string $privateKey, string $message)
+    public function ecsign(string $privateKey, string $message): \Elliptic\EC\Signature
     {
         if ($this->isHex($privateKey) === false) {
             throw new InvalidArgumentException('Invalid private key format.');
@@ -246,7 +245,7 @@ class Util
      * @param string $message
      * @return string
      */
-    public function hashPersonalMessage(string $message)
+    public function hashPersonalMessage(string $message): string
     {
         $prefix = sprintf("\x19Ethereum Signed Message:\n%d", mb_strlen($message));
         return $this->sha3($prefix . $message);
@@ -259,7 +258,7 @@ class Util
      * @throws InvalidArgumentException
      * @return bool
      */
-    public function isNegative(string $value)
+    public function isNegative(string $value): bool
     {
         if (!is_string($value)) {
             throw new InvalidArgumentException('The value to isNegative function must be string.');
@@ -275,7 +274,7 @@ class Util
      * @throws InvalidArgumentException
      * @return array|\phpseclib\Math\BigInteger
      */
-    public function toBn($number)
+    public function toBn(mixed $number): mixed
     {
         if ($number instanceof BigNumber){
             $bn = $number;
