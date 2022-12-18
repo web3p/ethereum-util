@@ -14,6 +14,7 @@ namespace Web3p\EthereumUtil;
 use InvalidArgumentException;
 use RuntimeException;
 use kornrunner\Keccak;
+use phpseclib\Math\BigInteger as BigNumber;
 use Elliptic\EC;
 use Elliptic\EC\KeyPair;
 use Elliptic\EC\Signature;
@@ -135,6 +136,7 @@ class Util
      * publicKeyToAddress
      * 
      * @param string $publicKey
+     * @throws InvalidArgumentException
      * @return string
      */
     public function publicKeyToAddress(string $publicKey)
@@ -154,6 +156,7 @@ class Util
      * privateKeyToPublicKey
      * 
      * @param string $privateKey
+     * @throws InvalidArgumentException
      * @return string
      */
     public function privateKeyToPublicKey(string $privateKey)
@@ -179,6 +182,7 @@ class Util
      * @param string $r
      * @param string $s
      * @param int $v
+     * @throws InvalidArgumentException
      * @return string
      */
     public function recoverPublicKey(string $hash, string $r, string $s, int $v)
@@ -211,6 +215,7 @@ class Util
      * 
      * @param string $privateKey
      * @param string $message
+     * @throws InvalidArgumentException
      * @return \Elliptic\EC\Signature
      */
     public function ecsign(string $privateKey, string $message)
@@ -245,5 +250,88 @@ class Util
     {
         $prefix = sprintf("\x19Ethereum Signed Message:\n%d", mb_strlen($message));
         return $this->sha3($prefix . $message);
+    }
+
+    /**
+     * isNegative
+     * 
+     * @param string
+     * @throws InvalidArgumentException
+     * @return bool
+     */
+    public function isNegative(string $value)
+    {
+        if (!is_string($value)) {
+            throw new InvalidArgumentException('The value to isNegative function must be string.');
+        }
+        return (strpos($value, '-') === 0);
+    }
+
+    /**
+     * toBn
+     * Change number or number string to bignumber.
+     * 
+     * @param BigNumber|string|int $number
+     * @throws InvalidArgumentException
+     * @return array|\phpseclib\Math\BigInteger
+     */
+    public function toBn($number)
+    {
+        if ($number instanceof BigNumber){
+            $bn = $number;
+        } elseif (is_int($number)) {
+            $bn = new BigNumber($number);
+        } elseif (is_numeric($number)) {
+            $number = (string) $number;
+
+            if ($this->isNegative($number)) {
+                $count = 1;
+                $number = str_replace('-', '', $number, $count);
+                $negative1 = new BigNumber(-1);
+            }
+            if (strpos($number, '.') > 0) {
+                $comps = explode('.', $number);
+
+                if (count($comps) > 2) {
+                    throw new InvalidArgumentException('toBn number must be a valid number.');
+                }
+                $whole = $comps[0];
+                $fraction = $comps[1];
+
+                return [
+                    new BigNumber($whole),
+                    new BigNumber($fraction),
+                    strlen($comps[1]),
+                    isset($negative1) ? $negative1 : false
+                ];
+            } else {
+                $bn = new BigNumber($number);
+            }
+            if (isset($negative1)) {
+                $bn = $bn->multiply($negative1);
+            }
+        } elseif (is_string($number)) {
+            $number = mb_strtolower($number);
+
+            if ($this->isNegative($number)) {
+                $count = 1;
+                $number = str_replace('-', '', $number, $count);
+                $negative1 = new BigNumber(-1);
+            }
+            if (empty($number)) {
+                $bn = new BigNumber(0);
+            } else if ($this->isZeroPrefixed($number) || $this->isHex($number)) {
+                $number = $this->stripZero($number);
+                $bn = new BigNumber($number, 16);
+            } else {
+                throw new InvalidArgumentException('toBn number must be valid hex string.');
+            }
+            if (isset($negative1)) {
+                $bn = $bn->multiply($negative1);
+            }
+        } else {
+            throw new InvalidArgumentException('toBn number must be BigNumber, string or int.');
+        }
+        return $bn;
     }
 }
