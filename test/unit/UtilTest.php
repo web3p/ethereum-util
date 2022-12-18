@@ -4,6 +4,9 @@ namespace Test\Unit;
 
 use Test\TestCase;
 use Web3p\EthereumUtil\Util;
+use phpseclib\Math\BigInteger as BigNumber;
+use InvalidArgumentException;
+use stdClass;
 
 class UtilTest extends TestCase
 {
@@ -126,5 +129,101 @@ class UtilTest extends TestCase
         $hashedMessage = $util->hashPersonalMessage('Hello world');
 
         $this->assertEquals('8144a6fa26be252b86456491fbcd43c1de7e022241845ffea1c3df066f7cfede', $hashedMessage);
+    }
+
+    /**
+     * testIsNegative
+     * 
+     * @return void
+     */
+    public function testIsNegative()
+    {
+        $util = new Util;
+        $isNegative = $util->isNegative('-1');
+        $this->assertTrue($isNegative);
+
+        $isNegative = $util->isNegative('1');
+        $this->assertFalse($isNegative);
+    }
+
+    /**
+     * testToBn
+     * 
+     * @return void
+     */
+    public function testToBn()
+    {
+        $util = new Util;
+        $bn = $util->toBn('');
+        $this->assertEquals($bn->toString(), '0');
+
+        $bn = $util->toBn(11);
+        $this->assertEquals($bn->toString(), '11');
+
+        $bn = $util->toBn('0x12');
+        $this->assertEquals($bn->toString(), '18');
+
+        $bn = $util->toBn('-0x12');
+        $this->assertEquals($bn->toString(), '-18');
+
+        $bn = $util->toBn(0x12);
+        $this->assertEquals($bn->toString(), '18');
+
+        $bn = $util->toBn('ae');
+        $this->assertEquals($bn->toString(), '174');
+
+        $bn = $util->toBn('-ae');
+        $this->assertEquals($bn->toString(), '-174');
+
+        $bn = $util->toBn('-1');
+        $this->assertEquals($bn->toString(), '-1');
+
+        $bn = $util->toBn('-0.1');
+        $this->assertEquals(count($bn), 4);
+        $this->assertEquals($bn[0]->toString(), '0');
+        $this->assertEquals($bn[1]->toString(), '1');
+        $this->assertEquals($bn[2], 1);
+        $this->assertEquals($bn[3]->toString(), '-1');
+
+        $bn = $util->toBn(-0.1);
+        $this->assertEquals(count($bn), 4);
+        $this->assertEquals($bn[0]->toString(), '0');
+        $this->assertEquals($bn[1]->toString(), '1');
+        $this->assertEquals($bn[2], 1);
+        $this->assertEquals($bn[3]->toString(), '-1');
+
+        $bn = $util->toBn('0.1');
+        $this->assertEquals(count($bn), 4);
+        $this->assertEquals($bn[0]->toString(), '0');
+        $this->assertEquals($bn[1]->toString(), '1');
+        $this->assertEquals($bn[2], 1);
+        $this->assertEquals($bn[3], false);
+
+        $bn = $util->toBn('-1.69');
+        $this->assertEquals(count($bn), 4);
+        $this->assertEquals($bn[0]->toString(), '1');
+        $this->assertEquals($bn[1]->toString(), '69');
+        $this->assertEquals($bn[2], 2);
+        $this->assertEquals($bn[3]->toString(), '-1');
+
+        $bn = $util->toBn(-1.69);
+        $this->assertEquals($bn[0]->toString(), '1');
+        $this->assertEquals($bn[1]->toString(), '69');
+        $this->assertEquals($bn[2], 2);
+        $this->assertEquals($bn[3]->toString(), '-1');
+
+        $bn = $util->toBn('1.69');
+        $this->assertEquals(count($bn), 4);
+        $this->assertEquals($bn[0]->toString(), '1');
+        $this->assertEquals($bn[1]->toString(), '69');
+        $this->assertEquals($bn[2], 2);
+        $this->assertEquals($bn[3], false);
+
+        $bn = $util->toBn(new BigNumber(1));
+        $this->assertEquals($bn->toString(), '1');
+        $util->toBn(new BigNumber(1));
+
+        $this->expectException(InvalidArgumentException::class);
+        $bn = $util->toBn(new stdClass);
     }
 }

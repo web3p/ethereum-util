@@ -25,6 +25,7 @@
     "require": {
         "PHP": "^7.1 | ^8.0",
         "kornrunner/keccak": "~1",
-        "simplito/elliptic-php": "~1.0.6"
+        "simplito/elliptic-php": "~1.0.6",
+        "phpseclib/phpseclib": "~2.0"
     }
 }
